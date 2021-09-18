@@ -10,7 +10,7 @@ var mysqlconnectin= mysql.createConnection({
     host: dbconfig.host,
     user: dbconfig.user,
     database: dbconfig.database,
-    //password: dbconfig.password
+    password: dbconfig.password
     
 });
 
