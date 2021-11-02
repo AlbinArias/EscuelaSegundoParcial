@@ -1,10 +1,9 @@
 const express = require('express');
 const app = express.Router();
-
 const mysqlconnectin = require('../configurations/db-conf');
+const security= require('../security/verifier')
 
-
-app.get('/maestros', (req, res) => {
+app.get('/maestros',security, (req, res) => {
     console.log('get lista de maestros');
     mysqlconnectin.query('select docente.id, docente.fecha_ingreso, id_persona, persona.nombre, persona.apellido, persona.fecha_nacimiento,persona.Direccion from docente inner join persona on id_persona=persona.id', (err, rows, fields) => {
         if (!err) {
@@ -17,7 +16,7 @@ app.get('/maestros', (req, res) => {
 });
 
 //Lista de maestro por id
-app.get('/maestros/:id',(req, res)=>{
+app.get('/maestros/:id',security, (req, res)=>{
     console.log('get maestro');
     mysqlconnectin.query('select docente.id, docente.fecha_ingreso,id_persona,persona.nombre, persona.apellido, persona.fecha_nacimiento,persona.Direccion  from docente inner join persona on id_persona=persona.id where docente.id=?',
     [req.params.id],(err, rows, fields)=>{
@@ -33,7 +32,7 @@ app.get('/maestros/:id',(req, res)=>{
 });
 
 //crear maestro 
-app.post('/maestros',(req, res)=>{
+app.post('/maestros',security, (req, res)=>{
     console.log('crear maestros');
     let est= req.body;
     mysqlconnectin.query('insert into docente(id_persona, fecha_ingreso) values (?,?)',[est.id_persona, est.fecha_ingreso],(err, result)=>{
@@ -50,7 +49,7 @@ app.post('/maestros',(req, res)=>{
 });
 
 //actualizar maestro
-app.put('/maestros/:id',(req, res)=>{
+app.put('/maestros/:id',security, (req, res)=>{
     console.log('actualizar maestro');
     let est= req.body;
     console.log(est);
@@ -68,7 +67,7 @@ app.put('/maestros/:id',(req, res)=>{
 });
      
 //eliminar maestro
-app.delete('/maestros/:id',(req, res)=>{
+app.delete('/maestros/:id',security,(req, res)=>{
     console.log('delete maestro');
     mysqlconnectin.query('delete from docente where id=?',[req.params.id],(err, result)=>{
         if(!err){

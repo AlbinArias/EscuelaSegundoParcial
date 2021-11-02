@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
 const mysqlconnectin = require('../configurations/db-conf');
+const security= require('../security/verifier')
 
 //lista de todas las personas
-router.get('/personas', (req, res) => {
+router.get('/personas',security, (req, res) => {
     console.log('get lista personas');
     mysqlconnectin.query('Select * from persona', (err, rows, fields) => {
         if (!err) {
@@ -16,7 +16,7 @@ router.get('/personas', (req, res) => {
     });
 });
 //Lista de persona por id
-router.get('/personas/:id',(req, res)=>{
+router.get('/personas/:id',security,(req, res)=>{
     console.log('get persona');
     mysqlconnectin.query('select * from persona where id=?',[req.params.id],(err, rows, fields)=>{
         if(!err){
@@ -31,7 +31,7 @@ router.get('/personas/:id',(req, res)=>{
 });
 
 //crear persona
-router.post('/personas',(req, res)=>{
+router.post('/personas',security,(req, res)=>{
     console.log('crear persona');
     let est= req.body;
     mysqlconnectin.query('insert into persona (Nombre, Apellido, fecha_nacimiento, Direccion) values (?,?,?,?)',[est.nombre, est.apellido, est.fecha_nacimiento, est.Direccion],(err, result)=>{
@@ -48,7 +48,7 @@ router.post('/personas',(req, res)=>{
 });
 
 //actualizar persona
-router.put('/personas/:id',(req, res)=>{
+router.put('/personas/:id',security,(req, res)=>{
     console.log('actualizar persona');
     let est= req.body;
     console.log(est);
@@ -66,7 +66,7 @@ router.put('/personas/:id',(req, res)=>{
 });
      
 //eliminar persona
-router.delete('/personas/:id',(req, res)=>{
+router.delete('/personas/:id',security,(req, res)=>{
     console.log('delete persona');
     mysqlconnectin.query('delete from persona where id=?',[req.params.id],(err, result)=>{
         if(!err){
