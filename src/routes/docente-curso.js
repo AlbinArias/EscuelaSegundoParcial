@@ -5,7 +5,7 @@ const security= require('../security/verifier')
 
 app.get('/docente-curso', security, (req, res) => {
     console.log('get lista docente-cursos');
-    mysqlconnectin.query('select curso_docente.id, persona.nombre, apellido,curso.nombres, stauts, fecha_inicio, fecha_fin from curso_docente inner join docente on  curso_docente.id_docente=docente.id inner join persona on docente.id_persona=persona.id inner join curso on id_curso=curso.id', 
+    mysqlconnectin.query('select curso_docente.id, curso_docente.id_docente, persona.nombre, apellido, curso_docente.id_curso, curso.nombres, stauts, fecha_inicio, fecha_fin from curso_docente inner join docente on  curso_docente.id_docente=docente.id inner join persona on docente.id_persona=persona.id inner join curso on id_curso=curso.id', 
     (err, rows, fields) => {
         if (!err) {
             res.send(rows);
@@ -18,7 +18,7 @@ app.get('/docente-curso', security, (req, res) => {
 
 app.get('/docente-curso/:id',security, (req, res)=>{
     console.log('get docente-curso');
-    mysqlconnectin.query('select curso_docente.id, persona.nombre, apellido,curso.nombres, stauts, fecha_inicio, fecha_fin from curso_docente inner join docente on  curso_docente.id_docente=docente.id inner join persona on docente.id_persona=persona.id inner join curso on id_curso=curso.id where curso_docente.id=?',[req.params.id],(err, rows, fields)=>{
+    mysqlconnectin.query('select curso_docente.id, curso_docente.id_docente, persona.nombre, apellido, curso_docente.id_curso, curso.nombres, stauts, fecha_inicio, fecha_fin from curso_docente inner join docente on  curso_docente.id_docente=docente.id inner join persona on docente.id_persona=persona.id inner join curso on id_curso=curso.id where curso_docente.id=?',[req.params.id],(err, rows, fields)=>{
         if(!err){
             res.send(rows);
         }
